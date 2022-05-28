@@ -1,4 +1,4 @@
-import db from "../db.js";
+/* import db from "../db.js";
 import bcrypt from "bcrypt";
 
 import { signUpSchema, signInSchema, logOutSchema } from "../schemas/authSchema.js";
@@ -80,3 +80,4 @@ export async function verifyInfo(req, res, next) {
   }
   next();
 }
+ */

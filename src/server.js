@@ -1,15 +1,16 @@
 import express, { json } from "express";
 import cors from "cors";
 
-import authRouter from './routes/authRouter.js';
-import historyRouter from './routes/historyRouter.js';
+import categoriesRouter from "./routes/categoriesRouter.js";
 
 const app = express();
 app.use(cors());
 app.use(json());
 
-app.use(authRouter);
-app.use(historyRouter);
+/* app.use(gamesRouter);
+app.use(rentalsRouter);
+app.use(customersRouter); */
+app.use(categoriesRouter);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
