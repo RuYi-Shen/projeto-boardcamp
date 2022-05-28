@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { getCategories } from '../controllers/categoriesController.js';
+import { getCategories, createCategory } from '../controllers/categoriesController.js';
 
-/* import { validateSignUp, validateSignIn, validateLogOut, verifyUser, validateUser, verifyInfo } from '../middlewares/authMiddleware.js';
-import { validateToken } from '../middlewares/historyMiddleware.js'; */
+import { checkCategory } from '../middlewares/categoriesMiddleware.js'; 
 
 const categoriesRouter = Router();
 
 categoriesRouter.get("/categories", getCategories);
+categoriesRouter.post("/categories", checkCategory, createCategory);
 
 export default categoriesRouter;
