@@ -2,10 +2,19 @@ import connection from "../db.js";
 
 export async function getGames(req, res) {
   try {
-    const games = await connection.query(
-      'SELECT games.*,categories.name as "categoryName" FROM games JOIN categories ON games."categoryId" = categories.id;'
-    );
-    res.json(games?.rows);
+    const search = req.query.name;
+    if (search) {
+      const games = await connection.query(
+        'SELECT games.*,categories.name as "categoryName" FROM games JOIN categories ON games."categoryId" = categories.id WHERE games.name ILIKE $1',
+        [search + "%"]
+      );
+      res.status(200).send(games.rows);
+    } else {
+      const games = await connection.query(
+        'SELECT games.*,categories.name as "categoryName" FROM games JOIN categories ON games."categoryId" = categories.id;'
+      );
+      res.json(games.rows);
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
