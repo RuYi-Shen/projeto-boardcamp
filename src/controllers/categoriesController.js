@@ -10,7 +10,7 @@ export async function getCategories(req, res) {
   }
 }
 
-export async function createCategory(req, res) {
+export async function insertCategory(req, res) {
   const category = req.body;
   try {
     const { name } = category;
