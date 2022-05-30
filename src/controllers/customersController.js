@@ -21,6 +21,23 @@ export async function getCustomers(req, res) {
   }
 }
 
+export async function getCustomer(req, res) {
+  try {
+    const id = req.params.id;
+    const customer = await connection.query(
+      "SELECT customers.* FROM customers WHERE customers.id = $1;",
+      [id]
+    );
+    if (customer.rows.length == 0) {
+      return res.status(404).send("Customer not found");
+    }
+    res.json(customer.rows[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+}
+
 export async function insertCustomer(req, res) {
   const customer = req.body;
   try {
@@ -46,17 +63,16 @@ export async function insertCustomer(req, res) {
 
 export async function updateCustomer(req, res) {
   const customer = req.body;
+  const id = req.params.id;
   try {
     const customerFromDB = await connection.query(
-      "SELECT * FROM customers WHERE cpf = $1",
-      [customer.cpf]
+      "SELECT * FROM customers WHERE id = $1",
+      [id]
     );
     if (customerFromDB?.rows.length == 0) {
       return res.status(404).send("Customer not found");
     }
-    await connection.query("DELETE FROM customers WHERE cpf = $1", [
-      customer.cpf,
-    ]);
+    await connection.query("DELETE FROM customers WHERE id = $1", [id]);
 
     const { name, phone, cpf, birthday } = customer;
     const result = await connection.query(
