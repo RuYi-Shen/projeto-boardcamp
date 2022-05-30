@@ -1,5 +1,3 @@
-import connection from "../db.js";
-
 import { customerSchema } from "../schemas/customerSchema.js";
 
 export async function checkCustomer(req, res, next) {
