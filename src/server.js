@@ -3,14 +3,15 @@ import cors from "cors";
 
 import categoriesRouter from "./routes/categoriesRouter.js";
 import gamesRouter from "./routes/gamesRouter.js";
+import customersRouter from "./routes/customersRouter.js";
 
 const app = express();
 app.use(cors());
 app.use(json());
 
 app.use(gamesRouter);
-/* app.use(rentalsRouter);
-app.use(customersRouter); */
+/* app.use(rentalsRouter); */
+app.use(customersRouter);
 app.use(categoriesRouter);
 
 
