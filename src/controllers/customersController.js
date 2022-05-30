@@ -72,12 +72,11 @@ export async function updateCustomer(req, res) {
     if (customerFromDB?.rows.length == 0) {
       return res.status(404).send("Customer not found");
     }
-    await connection.query("DELETE FROM customers WHERE id = $1", [id]);
 
     const { name, phone, cpf, birthday } = customer;
     const result = await connection.query(
-      "INSERT INTO customers (name,phone,cpf,birthday) VALUES ($1,$2,$3,$4)",
-      [name, phone, cpf, birthday]
+      "UPDATE customers SET name = $1, phone = $2, cpf = $3, birthday = $4 WHERE id = $5",
+      [name, phone, cpf, birthday, id]
     );
     res.sendStatus(200);
   } catch (error) {
