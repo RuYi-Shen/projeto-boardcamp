@@ -1,7 +1,10 @@
-import { Router } from 'express';
-import { getCategories, insertCategory } from '../controllers/categoriesController.js';
+import { Router } from "express";
+import {
+  getCategories,
+  insertCategory,
+} from "../controllers/categoriesController.js";
 
-import { checkCategory } from '../middlewares/categoriesMiddleware.js'; 
+import { checkCategory } from "../middlewares/categoriesMiddleware.js";
 
 const categoriesRouter = Router();
 

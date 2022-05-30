@@ -1,7 +1,12 @@
-import { Router } from 'express';
-import { getCustomer, getCustomers, insertCustomer, updateCustomer } from '../controllers/customersController.js';
+import { Router } from "express";
+import {
+  getCustomer,
+  getCustomers,
+  insertCustomer,
+  updateCustomer,
+} from "../controllers/customersController.js";
 
-import { checkCustomer } from '../middlewares/customersMiddleware.js'; 
+import { checkCustomer } from "../middlewares/customersMiddleware.js";
 
 const customersRouter = Router();
 

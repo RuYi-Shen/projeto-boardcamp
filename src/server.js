@@ -15,8 +15,7 @@ app.use(rentalsRouter);
 app.use(customersRouter);
 app.use(categoriesRouter);
 
-
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);
-})
+});

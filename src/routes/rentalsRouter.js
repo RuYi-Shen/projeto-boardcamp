@@ -1,7 +1,12 @@
-import { Router } from 'express';
-import { getRentals, insertRentals, updateRentals, deleteRentals } from '../controllers/rentalsController.js';
+import { Router } from "express";
+import {
+  getRentals,
+  insertRentals,
+  updateRentals,
+  deleteRentals,
+} from "../controllers/rentalsController.js";
 
-import { checkRental } from '../middlewares/rentalsMiddleware.js'; 
+import { checkRental } from "../middlewares/rentalsMiddleware.js";
 
 const rentalsRouter = Router();
 
