@@ -1,3 +1,3 @@
 # projeto-boardcamp
 
-heroku deploy in : https://rys-boardcamp.herokuapp.com/
+Server deploy in : https://rys-boardcamp.herokuapp.com/
