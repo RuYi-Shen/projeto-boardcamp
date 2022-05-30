@@ -99,4 +99,22 @@ export async function updateCustomer(req, res) {
 
 export async function updateRentals(req, res) {}
 
-export async function deleteRentals(req, res) {}
+export async function deleteRentals(req, res) {
+    const { id } = req.params;
+    try {
+        const rental = await connection.query("SELECT * FROM rentals WHERE id = $1", [id]);
+        if (rental.rows.length == 0) {
+            return res.status(404).send("Rental not found");
+        }
+        if (rental.returnDate != null) {
+            return res.status(400).send("Game already returned");
+        }
+
+        await connection.query("DELETE FROM rentals WHERE id = $1", [id]);
+        res.sendStatus(200);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+}
