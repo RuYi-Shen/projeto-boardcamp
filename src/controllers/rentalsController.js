@@ -43,15 +43,7 @@ export async function getRentals(req, res) {
 export async function insertRentals(req, res) {
   const { customerId, gameId, daysRented } = req.body;
   const game = res.locals.game;
-  let today = new Date();
-  const yyyy = today.getFullYear();
-  let mm = today.getMonth() + 1; // Months start at 0!
-  let dd = today.getDate();
-
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
-
-  today = yyyy + "-" + mm + "-" + dd;
+  let today = getDate();
 
   try {
     await connection.query(
@@ -97,24 +89,72 @@ export async function updateCustomer(req, res) {
   }
 }
 
-export async function updateRentals(req, res) {}
+export async function updateRentals(req, res) {
+  const id = req.params.id;
+  try {
+    const rental = await connection.query(
+      'SELECT * FROM rentals WHERE rentals."id" = $1',
+      [id]
+    );
+    if (rental.rows.length == 0) {
+      return res.status(404).send("Rental not found");
+    }
+    if (rental.rows[0].returnDate != null) {
+      return res.status(400).send("Game already returned");
+    }
+    const game = await connection.query("SELECT * FROM games WHERE id = $1", [
+      rental.rows[0].gameId,
+    ]);
+    let date1 = new Date(rental.rows[0].rentDate);
+    let date2 = new Date(getDate());
+    let daysRented = Math.ceil((date2 - date1) / (1000 * 3600 * 24));
+    
+    let delayFee = (daysRented - rental.rows[0].daysRented) * parseInt(game.rows[0].pricePerDay);
+    if (delayFee < 0) {
+        delayFee = 0;
+    }
+    await connection.query(
+      'UPDATE rentals SET "returnDate" = $1, "delayFee" = $2 WHERE rentals."id" = $3',
+      [getDate(), delayFee, id]
+    );
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+}
 
 export async function deleteRentals(req, res) {
-    const { id } = req.params;
-    try {
-        const rental = await connection.query("SELECT * FROM rentals WHERE id = $1", [id]);
-        if (rental.rows.length == 0) {
-            return res.status(404).send("Rental not found");
-        }
-        if (rental.returnDate != null) {
-            return res.status(400).send("Game already returned");
-        }
+  const { id } = req.params;
+  try {
+    const rental = await connection.query(
+      "SELECT * FROM rentals WHERE id = $1",
+      [id]
+    );
+    if (rental.rows.length == 0) {
+      return res.status(404).send("Rental not found");
+    }
+    if (rental.rows[0].returnDate != null) {
+      return res.status(400).send("Game already returned");
+    }
 
-        await connection.query("DELETE FROM rentals WHERE id = $1", [id]);
-        res.sendStatus(200);
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).send(error);
-    }
+    await connection.query("DELETE FROM rentals WHERE id = $1", [id]);
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+}
+
+function getDate() {
+  let today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1;
+  let dd = today.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  today = yyyy + "-" + mm + "-" + dd;
+  return today;
 }
