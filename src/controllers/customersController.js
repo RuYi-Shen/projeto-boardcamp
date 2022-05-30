@@ -5,13 +5,13 @@ export async function getCustomers(req, res) {
     const search = req.query.cpf;
     if (search) {
       const customers = await connection.query(
-        'SELECT customers.* FROM customers WHERE customers.cpf ILIKE $1;',
+        "SELECT customers.* FROM customers WHERE customers.cpf ILIKE $1;",
         [search + "%"]
       );
       res.status(200).send(customers.rows);
     } else {
       const customers = await connection.query(
-        'SELECT customers.* FROM customers;'
+        "SELECT customers.* FROM customers;"
       );
       res.json(customers.rows);
     }
@@ -21,13 +21,13 @@ export async function getCustomers(req, res) {
   }
 }
 
-export async function insertGame(req, res) {
-  const game = req.body;
+export async function insertCustomer(req, res) {
+  const customer = req.body;
   try {
-    const { name, image, stockTotal, categoryId, pricePerDay } = game;
+    const { name, phone, cpf, birthday } = customer;
     const result = await connection.query(
-      'INSERT INTO games (name,image,"stockTotal","categoryId","pricePerDay") VALUES ($1,$2,$3,$4,$5)',
-      [name, image, stockTotal, categoryId, pricePerDay]
+      "INSERT INTO customers (name,phone,cpf,birthday) VALUES ($1,$2,$3,$4)",
+      [name, phone, cpf, birthday]
     );
     res.sendStatus(201);
   } catch (error) {

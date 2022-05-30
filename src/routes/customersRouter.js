@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { getCustomers, } from '../controllers/customersController.js';
+import { getCustomers, insertCustomer } from '../controllers/customersController.js';
 
-import { checkGame } from '../middlewares/gamesMiddleware.js'; 
+import { checkCustomer } from '../middlewares/customersMiddleware.js'; 
 
 const customersRouter = Router();
 
 customersRouter.get("/customers", getCustomers);
-//customersRouter.post("/customers", checkGame, insertGame);
+customersRouter.post("/customers", checkCustomer, insertCustomer);
 
 export default customersRouter;
